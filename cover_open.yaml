@@ -1,0 +1,95 @@
+blueprint:
+  domain: automation
+  name: Window and Roof Cover Automation
+  description: |
+    This automation opens the window cover and, if the outside temperature is below 0,
+    also opens the roof cover based on the specified conditions.
+  input:
+    workday_sensor:
+      name: Workday Sensor
+      description: "Sensor indicating if it's a workday"
+      selector:
+        entity:
+          domain: binary_sensor
+    window_cover:
+      name: Window Cover
+      description: "Window cover entity"
+      selector:
+        entity:
+          domain: cover
+    roof_cover:
+      name: Roof Cover
+      description: "Roof cover entity"
+      selector:
+        entity:
+          domain: cover
+    outside_temperature_sensor:
+      name: Outside Temperature Sensor
+      description: "Temperature sensor for outside temperature"
+      selector:
+        entity:
+          domain: sensor
+    time_weekday:
+      name: Time Weekday
+      description: "Time weekday"
+      selector:
+        time:
+    time_weekend:
+      name: Time Weekend
+      description: "Time weekend"
+      selector:
+        time:
+    threshold_temperature:
+      name: Threshold Temperature
+      description: "Threshold temperature"
+      selector:
+        number:
+         min: -10
+         max: 10
+         unit_of_measurement: "°C"
+
+mode: restart
+max_exceeded: silent
+
+trigger:
+  - platform: time
+    at: !input time_weekday  # Replace with the actual time for workdays
+  - platform: time
+    at: !input time_weekend  # Replace with the actual time for weekends
+
+condition: 
+  - condition: or
+    conditions:
+      - condition: and
+        conditions:
+          - condition: time
+            after: !input time_weekday  # Replace with the actual time for workdays
+            before: !input time_weekend  # Replace with the actual time for weekends
+          - condition: state
+            entity_id: !input workday_sensor
+            state: "on"
+          - condition: numeric_state
+            entity_id: !input outside_temperature_sensor
+            above: !input threshold_temperature
+      - condition: and
+        conditions:
+          - condition: time
+            after: !input time_weekend  # Replace with the actual time for weekends
+          - condition: state
+            entity_id: !input workday_sensor
+            state: "off"
+          - condition: numeric_state
+            entity_id: !input outside_temperature_sensor
+            above: !input threshold_temperature
+
+action:
+  - service: cover.open_cover
+    target:
+      entity_id: !input window_cover
+  - condition: numeric_state
+    entity_id: !input outside_temperature_sensor
+    above: !input threshold_temperature
+  - service: cover.open_cover
+    target:
+      entity_id: !input roof_cover
+
