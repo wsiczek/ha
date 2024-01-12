@@ -44,6 +44,7 @@ blueprint:
     threshold_temperature:
       name: Threshold Temperature
       description: "Threshold temperature"
+      default: 5
       selector:
         number:
          min: -10
