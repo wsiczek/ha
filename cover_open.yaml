@@ -54,28 +54,28 @@ max_exceeded: silent
 trigger:
   - platform: time
     at: !input time_weekday  # Replace with the actual time for workdays
+condition:
+    condition: state
+    entity_id: !input workday_sensor
+    state: "on"  # Check if it's a working day
+action:
+  - service: cover.open_cover
+    target:
+      entity_id: !input window_cover
+  - condition: numeric_state
+    entity_id: !input outside_temperature_sensor
+    above: !input threshold_temperature
+  - service: cover.open_cover
+    target:
+      entity_id: !input roof_cover
+      
   - platform: time
     at: !input time_weekend  # Replace with the actual time for weekends
-
-condition: 
-  - condition: or
-    conditions:
-      - condition: and
-        conditions:
-          - condition: time
-            at: !input time_weekday  # Replace with the actual time for workdays
-          - condition: state
-            entity_id: !input workday_sensor
-            state: "on"
-      - condition: and
-        conditions:
-          - condition: time
-            at: !input time_weekend  # Replace with the actual time for weekends
-          - condition: state
-            entity_id: !input workday_sensor
-            state: "off"
-
-action:
+  condition:
+    condition: state
+    entity_id: !input workday_sensor
+    state: "off"  # Check if it's a working day  
+  action:
   - service: cover.open_cover
     target:
       entity_id: !input window_cover
