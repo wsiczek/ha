@@ -63,24 +63,17 @@ condition:
       - condition: and
         conditions:
           - condition: time
-            after: !input time_weekday  # Replace with the actual time for workdays
-            before: !input time_weekend  # Replace with the actual time for weekends
+            at: !input time_weekday  # Replace with the actual time for workdays
           - condition: state
             entity_id: !input workday_sensor
             state: "on"
-          - condition: numeric_state
-            entity_id: !input outside_temperature_sensor
-            above: !input threshold_temperature
       - condition: and
         conditions:
           - condition: time
-            after: !input time_weekend  # Replace with the actual time for weekends
+            at: !input time_weekend  # Replace with the actual time for weekends
           - condition: state
             entity_id: !input workday_sensor
             state: "off"
-          - condition: numeric_state
-            entity_id: !input outside_temperature_sensor
-            above: !input threshold_temperature
 
 action:
   - service: cover.open_cover
@@ -92,4 +85,3 @@ action:
   - service: cover.open_cover
     target:
       entity_id: !input roof_cover
-
