@@ -2,8 +2,8 @@ blueprint:
   domain: automation
   name: Window and Roof Cover Automation
   description: |
-    This automation opens the window cover and, if the outside temperature is below 0,
-    also opens the roof cover based on the specified conditions.
+    This automation opens the window cover at specified times on weekdays and weekends and
+    also opens the roof cover when the temperature is above the threshold.
   input:
     workday_sensor:
       name: Workday Sensor
@@ -32,11 +32,13 @@ blueprint:
     time_weekday:
       name: Time Weekday
       description: "Time weekday"
+      default: '07:00:00'
       selector:
         time:
     time_weekend:
       name: Time Weekend
       description: "Time weekend"
+      default: '08:00:00'
       selector:
         time:
     threshold_temperature:
@@ -47,41 +49,40 @@ blueprint:
          min: -10
          max: 10
          unit_of_measurement: "°C"
-
+  source_url: 'https://github.com/wsiczek/ha/'
+  
 mode: restart
 max_exceeded: silent
 
 trigger:
   - platform: time
-    at: !input time_weekday  # Replace with the actual time for workdays
+    at: !input time_weekday
+  - platform: time
+    at: !input time_weekend
+
 condition:
-    condition: state
-    entity_id: !input workday_sensor
-    state: "on"  # Check if it's a working day
+  - condition: template
+    value_template: >
+      {% if is_state('!input workday_sensor', 'on') and now().hour == states('!input time_weekday').hour %}
+        true
+      {% elif is_state('!input workday_sensor', 'off') and now().hour == states('!input time_weekend').hour %}
+        true
+      {% else %}
+        false
+      {% endif %}
+
 action:
   - service: cover.open_cover
     target:
       entity_id: !input window_cover
-  - condition: numeric_state
-    entity_id: !input outside_temperature_sensor
-    above: !input threshold_temperature
-  - service: cover.open_cover
-    target:
-      entity_id: !input roof_cover
-      
-  - platform: time
-    at: !input time_weekend  # Replace with the actual time for weekends
-  condition:
-    condition: state
-    entity_id: !input workday_sensor
-    state: "off"  # Check if it's a working day  
-  action:
-  - service: cover.open_cover
-    target:
-      entity_id: !input window_cover
-  - condition: numeric_state
-    entity_id: !input outside_temperature_sensor
-    above: !input threshold_temperature
-  - service: cover.open_cover
-    target:
-      entity_id: !input roof_cover
+  - choose:
+    - conditions:
+      - condition: numeric_state
+        entity_id: !input outside_temperature_sensor
+        above: !input threshold_temperature
+      sequence:
+      - service: cover.open_cover
+        target:
+          entity_id: !input roof_cover
+
+
