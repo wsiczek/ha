@@ -6,12 +6,15 @@ blueprint:
     start_max_vent_time:
       name: Start Max Vent Time
       default: "20:30:00"
+      has_date: false
     start_day_vent_time:
       name: Start Day Vent Time
       default: "08:00:00"
+      has_date: false
     start_night_vent_time:
       name: Start Night Vent Time
       default: "21:30:00"
+      has_date: false 
 
 trigger:
   - platform: time
@@ -24,11 +27,11 @@ trigger:
 action:
   - variables:
       vent_value: >
-        {% if trigger.now == states('input_datetime.start_max_vent_time') %}
+        {% if trigger.now.time() == states(start_max_vent_time) %}
           100
-        {% elif trigger.now == states('input_datetime.start_day_vent_time') %}
+        {% elif trigger.now.time() == states(start_day_vent_time) %}
           50
-        {% elif trigger.now == states('input_datetime.start_night_vent_time') %}
+        {% elif trigger.now.time() == states(start_night_vent_time) %}
           30
         {% endif %}
   - service: modbus.write_register
