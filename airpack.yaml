@@ -1,4 +1,4 @@
-blueprint:
+_eblueprint:
   name: Ventilation control
   description: Control ventilation based on time and settings
   domain: automation
@@ -65,8 +65,8 @@ variables:
   v_day_vent: !input 'day_vent'
   v_night_vent: !input 'night_vent'
   v_max_vent: !input 'max_vent'
-  v_max_enables: !input 'max_vent_enabled'
-  v_holiday_enabled: !input 'holiday_enabled'
+  v_max_enabled: !input 'max_vent_enabled'
+  v_holiday_enabled: !input 'holiday_mode_enabled'
 
 trigger:
   - platform: time
