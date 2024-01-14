@@ -74,7 +74,7 @@ action:
         {% elif trigger.id == 'night' %}
           {{ states('input_number.night_vent') }}
         {% elif trigger.id == 'max' %}
-          {{ states('input_number.max_vent') }}
+          !input 'max_vent'
         {% endif %}
   - service: modbus.write_register
     data:
