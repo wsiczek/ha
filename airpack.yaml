@@ -2,6 +2,7 @@ blueprint:
   name: Ventilation control
   description: Control ventilation based on time and settings
   domain: automation
+  source_url: 'https://github.com/wsiczek/ha/blob/main/airpack.yaml'
   input:
     day_vent_time:
       name: Day Vent Time
@@ -102,4 +103,4 @@ action:
       value: "{{ vent_value }}"
 
 mode: single
-source_url: 'https://github.com/wsiczek/ha/blob/main/cover_open.yaml'
+
