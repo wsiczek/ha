@@ -49,6 +49,11 @@ blueprint:
           max: 100
           unit_of_measurement: "%"
 
+variables:
+ v_day_vent: !input 'day_vent'
+ v_night_vent: !input 'night_vent'
+ v_max_vent: !input 'max_vent'
+
 trigger:
   - platform: time
     at: !input 'day_vent_time'
@@ -64,17 +69,16 @@ action:
   - variables:
       tid: >
         {{ trigger.id }}
-      v1: !input 'max_vent'
-      v2: !input max_vent
-      v3: >
-        {{ states('input_number.max_vent') }}
+      v1: {{ v_max_vent }}
+      v2: v_max_vent
+      v3: {{ states(v_max_vent) }}
       vent_value: >
         {% if trigger.id == 'day' %}
           {{ states('input_number.day_vent') }}
         {% elif trigger.id == 'night' %}
           {{ states('input_number.night_vent') }}
         {% elif trigger.id == 'max' %}
-          !input 'max_vent'
+          {{ states(v_max_vent) }}
         {% endif %}
   - service: modbus.write_register
     data:
