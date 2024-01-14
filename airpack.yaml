@@ -102,3 +102,4 @@ action:
       value: "{{ vent_value }}"
 
 mode: single
+source_url: 'https://github.com/wsiczek/ha/blob/main/cover_open.yaml'
