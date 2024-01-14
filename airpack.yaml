@@ -68,7 +68,7 @@ action:
         {{ states(!input 'max_vent') }}
       v2: !input 'max_vent'
       v3: >
-        {{ states(input_number.max_vent) }}
+        {{ states('input_number.max_vent') }}
       vent_value: >
         {% if trigger.id == 'day' %}
           {{ states('input_number.day_vent') }}
