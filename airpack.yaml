@@ -62,6 +62,10 @@ trigger:
 
 action:
   - variables:
+      tid: >
+        {{ trigger.id }}
+      vval: >
+        {{ states('input_number.max_vent') }}
       vent_value: >
         {% if trigger.id == 'day' %}
           {{ states('input_number.day_vent') }}
