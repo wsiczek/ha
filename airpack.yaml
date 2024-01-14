@@ -1,38 +1,81 @@
 blueprint:
-  name: Airpack Home daily schedul
-  description: 'Set times for different vent %'
+  name: Ventilation control
+  description: Control ventilation based on time and settings
   domain: automation
   input:
-    start_max_vent_time:
-      name: Start Max Vent Time
-      default: "20:30:00"
-      has_date: false
-    start_day_vent_time:
-      name: Start Day Vent Time
-      default: "08:00:00"
-      has_date: false
-    start_night_vent_time:
-      name: Start Night Vent Time
-      default: "21:30:00"
-      has_date: false 
+    day_vent_time:
+      name: Day Vent Time
+      description: Time to start day ventilation
+      default: "08:00"
+      selector:
+        time: {}
+    night_vent_time:
+      name: Night Vent Time
+      description: Time to start night ventilation
+      default: "20:30"
+      selector:
+        time: {}
+    full_vent_time:
+      name: Full Vent Time
+      description: Time to start full ventilation
+      default: "21:30"
+      selector:
+        time: {}
+    day_vent:
+      name: Day Vent
+      description: Ventilation level during the day
+      default: 50
+      selector:
+        number:
+          min: 0
+          max: 100
+          unit_of_measurement: "%"
+    night_vent:
+      name: Night Vent
+      description: Ventilation level during the night
+      default: 30
+      selector:
+        number:
+          min: 0
+          max: 100
+          unit_of_measurement: "%"
+    full_vent:
+      name: Full Vent
+      description: Ventilation level during full ventilation
+      default: 100
+      selector:
+        number:
+          min: 0
+          max: 100
+          unit_of_measurement: "%"
+    full_vent_enabled:
+      name: Full Vent Enabled
+      description: Enable or disable full ventilation
+      default: true
+      selector:
+        boolean: {}
 
 trigger:
   - platform: time
-    at: !input 'start_max_vent_time'
+    at: !input 'day_vent_time'
   - platform: time
-    at: !input 'start_day_vent_time'
+    at: !input 'night_vent_time'
   - platform: time
-    at: !input 'start_night_vent_time'
+    at: !input 'full_vent_time'
+    condition:
+      condition: template
+      value_template: "{{ is_state('input_boolean.full_vent_enabled', 'true') }}"
 
 action:
   - variables:
       vent_value: >
-        {% if trigger.now.time() == states(start_max_vent_time) %}
-          100
-        {% elif trigger.now.time() == states(start_day_vent_time) %}
-          50
-        {% elif trigger.now.time() == states(start_night_vent_time) %}
-          30
+        {% set current_time = trigger.now.time().strftime('%H:%M:%S') %}
+        {% if current_time == states('input_datetime.day_vent_time')[0:8] %}
+          {{ states('input_number.day_vent') }}
+        {% elif current_time == states('input_datetime.night_vent_time')[0:8] %}
+          {{ states('input_number.night_vent') }}
+        {% elif current_time == states('input_datetime.full_vent_time')[0:8] %}
+          {{ states('input_number.full_vent') }}
         {% endif %}
   - service: modbus.write_register
     data:
