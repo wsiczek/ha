@@ -1,0 +1,50 @@
+blueprint:
+  name: ZigBee Remote Automation
+  description: Create an automation for a ZigBee remote with 4 buttons and 3 press types
+  domain: automation
+  input:
+    remote:
+      name: ZigBee Remote
+      description: The ZigBee remote to use
+      selector:
+        device:
+          integration: zha
+    button_1_short:
+      name: Button 1 Short Press
+      description: The action to perform when button 1 is pressed shortly
+      default: []
+      selector:
+        action: {}
+    button_1_long:
+      name: Button 1 Long Press
+      description: The action to perform when button 1 is pressed long
+      default: []
+      selector:
+        action: {}
+    button_1_double:
+      name: Button 1 Double Press
+      description: The action to perform when button 1 is pressed twice
+      default: []
+      selector:
+        action: {}
+    # Repeat the same for button 2, 3, and 4
+mode: single
+max_exceeded: silent
+variables:
+  device_id: !input 'remote'
+trigger:
+  - platform: event
+    event_type: zha_event
+condition: "{{ trigger.event.data.device_id == device_id }}"
+action:
+  - variables:
+      button: "{{ trigger.event.data.command }}"
+      press_type: "{{ trigger.event.data.args.press_type }}"
+  - choose:
+    - conditions: "{{ button == 'button_1' and press_type == 'press' }}"
+      sequence: !input 'button_1_short'
+    - conditions: "{{ button == 'button_1' and press_type == 'hold' }}"
+      sequence: !input 'button_1_long'
+    - conditions: "{{ button == 'button_1' and press_type == 'double' }}"
+      sequence: !input 'button_1_double'
+    # Repeat the same for button 2, 3, and 4
