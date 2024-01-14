@@ -65,19 +65,19 @@ trigger:
     at: !input 'max_vent_time'
     id: 'max'
 
-
 action:
   - variables:
       tid: >
         {{ trigger.id }}
-      v3: {{ states(v_max_vent) }}
+      v1: v_max_vent
+      v3: {{ v_max_vent }}
       vent_value: >
         {% if trigger.id == 'day' %}
           {{ states('input_number.day_vent') }}
         {% elif trigger.id == 'night' %}
           {{ states('input_number.night_vent') }}
         {% elif trigger.id == 'max' %}
-          {{ states(v_max_vent) }}
+          {{ v_max_vent }}
         {% endif %}
   - service: modbus.write_register
     data:
