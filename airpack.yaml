@@ -1,4 +1,4 @@
-_eblueprint:
+blueprint:
   name: Ventilation control
   description: Control ventilation based on time and settings
   domain: automation
