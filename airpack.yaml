@@ -48,12 +48,6 @@ blueprint:
           min: 0
           max: 100
           unit_of_measurement: "%"
-    full_vent_enabled:
-      name: Full Vent Enabled
-      description: Enable or disable full ventilation
-      default: true
-      selector:
-        boolean: {}
 
 trigger:
   - platform: time
@@ -62,10 +56,6 @@ trigger:
     at: !input 'night_vent_time'
   - platform: time
     at: !input 'full_vent_time'
-
-condition:
-  - condition: template
-    value_template: "{{ is_state('input_boolean.full_vent_enabled', 'true') }}"
 
 action:
   - variables:
