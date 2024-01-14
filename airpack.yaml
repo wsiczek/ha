@@ -6,19 +6,19 @@ blueprint:
     day_vent_time:
       name: Day Vent Time
       description: Time to start day ventilation
-      default: "08:00"
+      default: "08:00:00"
       selector:
         time: {}
     night_vent_time:
       name: Night Vent Time
       description: Time to start night ventilation
-      default: "20:30"
+      default: "20:30:00"
       selector:
         time: {}
     max_vent_time:
       name: Max Vent Time
       description: Time to start max ventilation
-      default: "21:30"
+      default: "21:30:00"
       selector:
         time: {}
     day_vent:
