@@ -52,13 +52,13 @@ blueprint:
     max_vent_enabled:
       name: Max vent enabled
       description: Enable mx vent time
-      default: true
+      default: on
       selector:
         boolean: {}
     holiday_mode_enabled:
       name: Holiday mode
       description: Enable holiday mode
-      default: false
+      default: off
       selector:
         boolean: {}
 
@@ -85,7 +85,7 @@ action:
       vent_value: >
         {% if trigger.id == 'max' and v_holiday_enabled == false and v_max_enabled == true %}
           {{ v_max_vent }}
-        {% elif trigger.id == 'day' and v_holiday_enabled == false %}
+        {% elif trigger.id == 'day' and is_state('!input holiday_mode_enabled', 'off') %}
           {{ v_day_vent }}
         {% else %}
           {{ v_night_vent }}
