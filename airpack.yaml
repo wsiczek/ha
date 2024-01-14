@@ -62,7 +62,7 @@ action:
       current_time: >
         {{ now().time().strftime('%H:%M') }}
       trigger_time: >
-        {{ states('input_datetime.day_vent_time')[0:5] }}
+        {{ !input full_vent_time }}
       vent_value: >
         {% if current_time == states('input_datetime.day_vent_time')[0:5] %}
           {{ states('input_number.day_vent') }}
