@@ -62,9 +62,10 @@ trigger:
     at: !input 'night_vent_time'
   - platform: time
     at: !input 'full_vent_time'
-    condition:
-      condition: template
-      value_template: "{{ is_state('input_boolean.full_vent_enabled', 'true') }}"
+
+condition:
+  - condition: template
+    value_template: "{{ is_state('input_boolean.full_vent_enabled', 'true') }}"
 
 action:
   - variables:
