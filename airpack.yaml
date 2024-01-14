@@ -15,9 +15,9 @@ blueprint:
       default: "20:30"
       selector:
         time: {}
-    full_vent_time:
-      name: Full Vent Time
-      description: Time to start full ventilation
+    max_vent_time:
+      name: Max Vent Time
+      description: Time to start max ventilation
       default: "21:30"
       selector:
         time: {}
@@ -39,9 +39,9 @@ blueprint:
           min: 0
           max: 100
           unit_of_measurement: "%"
-    full_vent:
-      name: Full Vent
-      description: Ventilation level during full ventilation
+    max_vent:
+      name: Max Vent
+      description: Ventilation level during max ventilation
       default: 100
       selector:
         number:
@@ -57,8 +57,8 @@ trigger:
     at: !input 'night_vent_time'
     id: 'night'
   - platform: time
-    at: !input 'full_vent_time'
-    id: 'full'
+    at: !input 'max_vent_time'
+    id: 'max'
 
 action:
   - variables:
@@ -67,8 +67,8 @@ action:
           {{ states('input_number.day_vent') }}
         {% elif trigger.id == 'night' %}
           {{ states('input_number.night_vent') }}
-        {% elif trigger.id == 'full' %}
-          {{ states('input_number.full_vent') }}
+        {% elif trigger.id == 'max' %}
+          {{ states('input_number.max_vent') }}
         {% endif %}
   - service: modbus.write_register
     data:
