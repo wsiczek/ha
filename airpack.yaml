@@ -59,13 +59,16 @@ trigger:
 
 action:
   - variables:
+      current_time: >
+        {{ trigger.now.time().strftime('%H:%M') }}
+      trigger_time: >
+        {{ states('input_datetime.day_vent_time')[0:5] }}
       vent_value: >
-        {% set current_time = trigger.now.time().strftime('%H:%M:%S') %}
-        {% if current_time == states('input_datetime.day_vent_time')[0:8] %}
+        {% if current_time == states('input_datetime.day_vent_time')[0:5] %}
           {{ states('input_number.day_vent') }}
-        {% elif current_time == states('input_datetime.night_vent_time')[0:8] %}
+        {% elif current_time == states('input_datetime.night_vent_time')[0:5] %}
           {{ states('input_number.night_vent') }}
-        {% elif current_time == states('input_datetime.full_vent_time')[0:8] %}
+        {% elif current_time == states('input_datetime.full_vent_time')[0:5] %}
           {{ states('input_number.full_vent') }}
         {% endif %}
   - service: modbus.write_register
