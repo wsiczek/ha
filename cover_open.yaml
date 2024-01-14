@@ -50,7 +50,7 @@ blueprint:
          min: -10
          max: 10
          unit_of_measurement: "°C"
-  source_url: 'https://github.com/wsiczek/ha/'
+  source_url: 'https://github.com/wsiczek/ha/blob/main/cover_open.yaml'
   
 mode: restart
 max_exceeded: silent
