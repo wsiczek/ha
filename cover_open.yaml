@@ -73,9 +73,9 @@ trigger:
 condition:
   - condition: template
     value_template: >
-      {% if v_workday == 'on' and trigger.id == 'weekday' %}
+      {% if v_holiday == 'off' and v_workday == 'on' and trigger.id == 'weekday' %}
         true
-      {% elif v_workday == 'off' and trigger.id == 'weekend' %}
+      {% elif v_holiday == 'off' and v_workday == 'off' and trigger.id == 'weekend' %}
         true
       {% else %}
         false
