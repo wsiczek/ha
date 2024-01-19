@@ -61,7 +61,7 @@ blueprint:
       default: off
       selector:
         boolean: {}
-    holida_mode:
+    holiday_mode:
       name: Holiday mode entity
       description: "Holiday mode switch entity"
       selector:
@@ -72,7 +72,7 @@ variables:
   v_night_vent: !input 'night_vent'
   v_max_vent: !input 'max_vent'
   v_max_enabled: !input 'max_vent_enabled'
-  v_holiday_enabled: !input 'holiday_mode_enabled'
+  v_holiday_enabled: !input 'holiday_mode'
 
 trigger:
   - platform: time
