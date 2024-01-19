@@ -55,12 +55,6 @@ blueprint:
       default: on
       selector:
         boolean: {}
-    holiday_mode_enabled:
-      name: Holiday mode
-      description: Enable holiday mode
-      default: off
-      selector:
-        boolean: {}
     holiday_mode:
       name: Holiday mode
       description: Choose holiday mode helper
@@ -73,7 +67,6 @@ variables:
   v_night_vent: !input 'night_vent'
   v_max_vent: !input 'max_vent'
   v_max_enabled: !input 'max_vent_enabled'
-  v_holiday_enabled: !input 'holiday_mode'
   v_holiday: "{{ states(holiday_mode) }}"
 
 trigger:
