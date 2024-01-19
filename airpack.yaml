@@ -85,7 +85,7 @@ action:
       vent_value: >
         {% if trigger.id == 'max' and v_holiday_enabled == false and v_max_enabled == true %}
           {{ v_max_vent }}
-        {% elif trigger.id == 'day' and is_state('!input holiday_mode_enabled', 'off') %}
+        {% elif trigger.id == 'day' and v_holiday_enabled == false %}
           {{ v_day_vent }}
         {% else %}
           {{ v_night_vent }}
