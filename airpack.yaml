@@ -61,7 +61,12 @@ blueprint:
       default: off
       selector:
         boolean: {}
-
+    holida_mode:
+      name: Holiday mode entity
+      description: "Holiday mode switch entity"
+      selector:
+        entity:
+          domain: switch
 variables:
   v_day_vent: !input 'day_vent'
   v_night_vent: !input 'night_vent'
