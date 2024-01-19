@@ -61,13 +61,20 @@ blueprint:
       default: off
       selector:
         boolean: {}
-
+    holiday_mode:
+      name: Holiday mode
+      description: Choose holiday mode helper
+      selector:
+        entity:
+          domain: input_boolean
+        
 variables:
   v_day_vent: !input 'day_vent'
   v_night_vent: !input 'night_vent'
   v_max_vent: !input 'max_vent'
   v_max_enabled: !input 'max_vent_enabled'
-  v_holiday_enabled: !input 'holiday_mode_enabled'
+  v_holiday_enabled: !input 'holiday_mode'
+  v_holiday: "{{ states(holiday_mode) }}"
 
 trigger:
   - platform: time
@@ -83,9 +90,9 @@ trigger:
 action:
   - variables:
       vent_value: >
-        {% if trigger.id == 'max' and v_holiday_enabled == false and v_max_enabled == true %}
+        {% if trigger.id == 'max' and v_holiday == 'off' and v_max_enabled == true %}
           {{ v_max_vent }}
-        {% elif trigger.id == 'day' and v_holiday_enabled == false %}
+        {% elif trigger.id == 'day' and v_holiday == 'off' %}
           {{ v_day_vent }}
         {% else %}
           {{ v_night_vent }}
