@@ -72,7 +72,7 @@ variables:
   v_night_vent: !input 'night_vent'
   v_max_vent: !input 'max_vent'
   v_max_enabled: !input 'max_vent_enabled'
-  v_holiday_enabled: !input 'holiday_mode'
+  v_holiday_enabled: !input 'holiday_mode_enabled'
 
 trigger:
   - platform: time
