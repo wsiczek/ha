@@ -4,6 +4,7 @@ blueprint:
   description: |
     This automation opens the window cover at specified times on weekdays and weekends and
     also opens the roof cover when the temperature is above the threshold.
+  source_url: 'https://github.com/wsiczek/ha/blob/main/cover_open.yaml'
   input:
     workday_sensor:
       name: Workday Sensor
@@ -50,8 +51,17 @@ blueprint:
          min: -10
          max: 10
          unit_of_measurement: "°C"
-  source_url: 'https://github.com/wsiczek/ha/blob/main/cover_open.yaml'
-
+    holiday_mode:
+      name: Holiday mode
+      description: Choose holiday mode helper
+      selector:
+        entity:
+          domain: input_boolean
+        
+variables:
+  v_workday: "{{ states(workday_sensor) }}"
+  v_holiday: "{{ states(holiday_mode) }}"
+  
 trigger:
   - platform: time
     at: !input time_weekday
@@ -63,9 +73,9 @@ trigger:
 condition:
   - condition: template
     value_template: >
-      {% if is_state('!input workday_sensor', 'on') and trigger.id == 'weekday' %}
+      {% if v_workday == 'on' and trigger.id == 'weekday' %}
         true
-      {% elif is_state('!input workday_sensor', 'off') and trigger.id == 'weekend' %}
+      {% elif v_workday == 'off' and trigger.id == 'weekend' %}
         true
       {% else %}
         false
