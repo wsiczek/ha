@@ -77,7 +77,7 @@ trigger:
 action:
   - variables:
       vent_value: >
-        {% if trigger.id == 'max' and v_holiday == 'off' and v_max_enabled == 'on' %}
+        {% if trigger.id == 'max' and v_holiday == 'off' and v_max_enabled == true %}
           {{ v_max_vent }}
         {% elif trigger.id == 'day' and v_holiday == 'off' %}
           {{ v_day_vent }}
