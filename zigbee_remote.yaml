@@ -2,6 +2,7 @@ blueprint:
   name: ZigBee Remote Automation
   description: Create an automation for a ZigBee remote with 4 buttons and 3 press types v.241122_1347
   domain: automation
+  source_url: 'https://github.com/wsiczek/ha/blob/main/zigbee_remote.yaml'
   input:
     remote:
       name: ZigBee Remote
