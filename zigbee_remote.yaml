@@ -98,6 +98,7 @@ action:
   - variables:
       button: "{{ trigger.event.data.command }}"
       press_type: "{{ trigger.event.data.args.press_type }}"
+      my_var: "{{ trigger.event.data.endpoint_id }}"
   - choose:
     - conditions: "{{ button == 'button_1' and press_type == 'press' }}"
       sequence: !input 'button_1_short'
