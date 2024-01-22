@@ -3,7 +3,7 @@ blueprint:
   name: Window and Roof Cover Automation
   description: |
     This automation opens the window cover at specified times on weekdays and weekends and
-    also opens the roof cover when the temperature is above the threshold v.240122_1330
+    also opens the roof cover when the temperature is above the threshold v.240122_1337
   source_url: 'https://github.com/wsiczek/ha/blob/main/cover_open.yaml'
   input:
     window_cover:
