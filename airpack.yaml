@@ -1,6 +1,6 @@
 blueprint:
   name: Ventilation control
-  description: Control ventilation based on time and settings v.20240122_1323
+  description: Control ventilation based on time and settings v.20240122_2150
   domain: automation
   source_url: 'https://github.com/wsiczek/ha/blob/main/airpack.yaml'
   input:
