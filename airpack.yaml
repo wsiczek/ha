@@ -1,6 +1,6 @@
 blueprint:
   name: Ventilation control
-  description: Control ventilation based on time and settings v.20240122_1317
+  description: Control ventilation based on time and settings v.20240122_1323
   domain: automation
   source_url: 'https://github.com/wsiczek/ha/blob/main/airpack.yaml'
   input:
@@ -55,19 +55,13 @@ blueprint:
       default: on
       selector:
         boolean: {}
-    holiday_mode:
-      name: Holiday mode
-      description: Choose holiday mode helper
-      selector:
-        entity:
-          domain: input_boolean
-        
+
 variables:
   v_day_vent: !input 'day_vent'
   v_night_vent: !input 'night_vent'
   v_max_vent: !input 'max_vent'
   v_max_enabled: !input 'max_vent_enabled'
-  v_holiday: "{{ states('!input holiday_mode') }}"
+  v_holiday: "{{ states('input_boolean.holiday_mode') }}"
 
 trigger:
   - platform: time
@@ -83,7 +77,7 @@ trigger:
 action:
   - variables:
       vent_value: >
-        {% if trigger.id == 'max' and v_holiday == 'off' and v_max_enabled == true %}
+        {% if trigger.id == 'max' and v_holiday == 'off' and v_max_enabled == 'on' %}
           {{ v_max_vent }}
         {% elif trigger.id == 'day' and v_holiday == 'off' %}
           {{ v_day_vent }}
