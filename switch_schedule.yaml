@@ -1,1 +1,51 @@
+blueprint:
+  name: Switch schedule
+  description: Turn on or off a switch based on a time schedule
+  domain: automation
+  input:
+    switch_entity:
+      name: Switch
+      description: The switch to control
+      selector:
+        entity:
+          domain: switch
+    on_time:
+      name: On time
+      description: The time of the day to turn on the switch
+      selector:
+        time:
+    off_time:
+      name: Off time
+      description: The time of the day to turn off the switch
+      selector:
+        time:
 
+trigger:
+  - platform: time
+    at: !input on_time
+  - platform: time
+    at: !input off_time
+  - platform: homeassistant
+    event: start
+
+action:
+  - choose:
+      - conditions:
+          - condition: time
+            after: !input on_time
+            before: !input off_time
+        sequence:
+          - service: switch.turn_on
+            target:
+              entity_id: !input switch_entity
+      - conditions:
+          - condition: or
+            conditions:
+              - condition: time
+                before: !input on_time
+              - condition: time
+                after: !input off_time
+        sequence:
+          - service: switch.turn_off
+            target:
+              entity_id: !input switch_entity
