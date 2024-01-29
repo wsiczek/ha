@@ -1,0 +1,39 @@
+trigger:
+  - platform: numeric_state
+    entity_id: sensor.living_room_temperature
+    attribute: temperature
+    below: 20
+    id: temp-off
+  - platform: event
+    event_type: timer.finished
+    event_data:
+      entity_id: timer.light_timer
+    id: timer-finished
+  .
+  .
+  .
+action:
+  - choose:
+      - conditions:
+          - condition: trigger
+      - conditions:
+          - condition: trigger
+            id: temp-off
+        sequence:
+          - service: timer.start
+            data:
+              duration: 1800
+            target:
+              entity_id: timer.light_timer
+          - service: switch.turn_on
+            data: {}
+            target:
+              entity_id: switch.living_room
+      - conditions:
+          - condition: trigger
+            id: timer-finished
+        sequence:
+          - service: light.turn_off
+            data: {}
+            target:
+              entity_id: light.bedroom
