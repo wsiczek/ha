@@ -64,7 +64,7 @@ action:
     - conditions:
       - condition: template
         value_template: >
-          {% if v_outside_temp <= v_thres_temp %}
+          {% if v_outside_temp >= v_thres_temp %}
             true
           {% else %}
             false
