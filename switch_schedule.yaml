@@ -1,24 +1,30 @@
 blueprint:
-  name: On-Off Schedule for Switch Entity
-  description: Turn ON and OFF a switch entity based on specified times.
+  name: Turn Switch On/Off at Defined Time
+  description: Turn a switch on or off at specified times
   domain: automation
   input:
-    automation_target:
-      name: Automation target
-      description: The target switch entity to control.
+    switch_entity:
+      name: Switch
       selector:
         entity:
           domain: switch
-    time_blocks:
-      name: Time Blocks
-      description: Configure the ON and OFF time blocks.
+    time_entity:
+      name: Time
       selector:
         time:
-          multiple: true
-  trigger:
-    - platform: time
-      at: !input time_blocks
-  action:
-    - service_template: >
-        switch.turn_{{ 'on' if now().time() >= strptime(on_time, '%H:%M:%S').time() else 'off' }}
-      entity_id: !input automation_target
+    type:
+      name: Type
+      selector:
+        dropdown:
+          options:
+            - ON
+            - OFF
+
+trigger:
+  platform: time
+  at: !input time_entity
+
+action:
+  - service_template: "switch.turn_{{ type }}"
+    target:
+      entity_id: !input switch_entity
