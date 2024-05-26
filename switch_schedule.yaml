@@ -14,11 +14,8 @@ blueprint:
         time:
     type:
       name: Type
-      selector:
-        dropdown:
-          options:
-            - ON
-            - OFF
+      description: Enter either "ON" or "OFF"
+      default: ON
 
 trigger:
   platform: time
